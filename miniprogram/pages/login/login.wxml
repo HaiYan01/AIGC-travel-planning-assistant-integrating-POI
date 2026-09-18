@@ -1,0 +1,58 @@
+<!--pages/login/login.wxml-->
+<image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+<view class="container">
+  <view class="glass-card card">
+    <view class="logo">
+      <text class="logo-icon">🧭</text>
+    </view>
+    <view class="title">{{isRegister ? '创建账号' : '欢迎回来'}}</view>
+    <view class="desc">{{isRegister ? '开始你的旅行规划之旅' : '登录账号，继续规划旅程'}}</view>
+
+    <!-- 用户名（注册时显示） -->
+    <view class="form-item" wx:if="{{isRegister}}">
+      <input 
+        class="glass-input form-input" 
+        placeholder="用户名" 
+        value="{{username}}"
+        bindinput="onUsernameInput"
+      />
+    </view>
+
+    <!-- 邮箱 -->
+    <view class="form-item">
+      <input 
+        class="glass-input form-input" 
+        placeholder="邮箱" 
+        type="email"
+        value="{{email}}"
+        bindinput="onEmailInput"
+      />
+    </view>
+
+    <!-- 密码 -->
+    <view class="form-item">
+      <input 
+        class="glass-input form-input" 
+        placeholder="密码" 
+        type="password"
+        value="{{password}}"
+        bindinput="onPasswordInput"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button 
+      class="glass-btn-primary submit-btn {{loading ? 'loading' : ''}}" 
+      bindtap="handleSubmit"
+      disabled="{{loading}}"
+    >
+      {{loading ? '处理中...' : (isRegister ? '注册' : '登录')}}
+    </button>
+
+    <!-- 切换模式 -->
+    <view class="switch-mode">
+      <text class="switch-text">{{isRegister ? '已有账号？' : '还没有账号？'}}</text>
+      <text class="switch-link" bindtap="toggleMode">{{isRegister ? '立即登录' : '立即注册'}}</text>
+    </view>
+  </view>
+</view>

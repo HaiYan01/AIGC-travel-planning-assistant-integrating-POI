@@ -1,0 +1,239 @@
+/* pages/exchange/exchange.wxss */
+.page-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  padding: 30rpx;
+  min-height: 100vh;
+}
+
+.glass-card {
+  padding: 36rpx;
+  border-radius: 28rpx;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 
+    0 8rpx 30rpx rgba(0, 0, 0, 0.12),
+    inset 0 3rpx 12rpx rgba(255, 255, 255, 0.25);
+  margin-bottom: 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.12) 0%, 
+    transparent 100%);
+  pointer-events: none;
+  border-radius: 28rpx 28rpx 0 0;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.title-icon {
+  margin-right: 12rpx;
+}
+
+.card-desc {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 36rpx;
+}
+
+.form-item {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 16rpx;
+}
+
+.glass-input {
+  position: relative;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 18rpx;
+  padding: 28rpx;
+  min-height: 92rpx;
+  font-size: 30rpx;
+  color: white;
+  font-weight: 600;
+  box-shadow: 
+    inset 0 0 14rpx rgba(255, 255, 255, 0.25),
+    0 3rpx 10rpx rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+}
+
+.input-placeholder {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+
+.input-placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.amount-input {
+  font-size: 40rpx;
+  font-weight: 600;
+  text-align: center;
+}
+
+.currency-selector {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.currency-item {
+  flex: 1;
+}
+
+.currency-picker {
+  padding: 24rpx;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.currency-code {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 8rpx;
+}
+
+.currency-name {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.swap-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40rpx;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 4rpx 16rpx rgba(99, 102, 241, 0.3),
+    inset 0 2rpx 8rpx rgba(255, 255, 255, 0.15);
+}
+
+.swap-icon {
+  color: white;
+  font-size: 28rpx;
+}
+
+.result-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.7) 0%, rgba(168, 85, 247, 0.7) 100%);
+  border-radius: 20rpx;
+  padding: 32rpx;
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 8rpx 24rpx rgba(99, 102, 241, 0.3),
+    inset 0 2rpx 8rpx rgba(255, 255, 255, 0.15);
+}
+
+.result-amount {
+  margin-bottom: 16rpx;
+}
+
+.result-value {
+  font-size: 56rpx;
+  font-weight: 700;
+}
+
+.result-currency {
+  font-size: 32rpx;
+  margin-left: 12rpx;
+  opacity: 0.9;
+}
+
+.result-rate {
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-bottom: 20rpx;
+}
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12rpx 32rpx;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  display: inline-block;
+  box-shadow: inset 0 2rpx 6rpx rgba(255, 255, 255, 0.15);
+}
+
+.loading {
+  text-align: center;
+  padding: 32rpx;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 28rpx;
+}
+
+.rates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+}
+
+.rate-item {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12rpx;
+  padding: 20rpx;
+  text-align: center;
+  box-shadow: inset 0 2rpx 6rpx rgba(255, 255, 255, 0.08);
+}
+
+.rate-currency {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8rpx;
+}
+
+.rate-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: white;
+}

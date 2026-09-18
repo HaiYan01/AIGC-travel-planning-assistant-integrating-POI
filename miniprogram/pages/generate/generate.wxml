@@ -1,0 +1,176 @@
+<!--pages/generate/generate.wxml-->
+<view class="page-wrapper">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+  
+  <view class="container">
+    <view class="glass-card">
+      <view class="card-title">
+        <text class="title-icon">🧭</text>
+        <text>AI行程规划</text>
+      </view>
+      <view class="card-desc">告诉我们你的旅行需求，AI将为你生成专属行程方案</view>
+
+      <!-- 目的地 -->
+      <view class="form-item">
+        <view class="form-label">目的地 <text class="required">*</text></view>
+        <input 
+          class="glass-input" 
+          placeholder="例如：杭州" 
+          placeholder-class="input-placeholder"
+          value="{{destination}}"
+          bindinput="onDestinationInput"
+        />
+      </view>
+
+      <!-- 热门目的地 -->
+      <view class="hot-cities">
+        <text class="hot-label">热门：</text>
+        <view 
+          class="city-tag glass-tag {{destination === item ? 'active' : ''}}" 
+          wx:for="{{hotCities}}" 
+          wx:key="*this"
+          bindtap="selectCity"
+          data-city="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+
+      <!-- 出发城市（选填） -->
+      <view class="form-item">
+        <view class="form-label">出发城市 <text class="text-gray">（选填）</text></view>
+        <input 
+          class="glass-input" 
+          placeholder="例如：北京" 
+          placeholder-class="input-placeholder"
+          value="{{departureCity}}"
+          bindinput="onDepartureCityInput"
+        />
+      </view>
+
+      <!-- 出行日期 -->
+      <view class="form-item">
+        <view class="form-label">出行日期 <text class="required">*</text> <text class="text-gray">（仅自己可见）</text></view>
+        <picker mode="date" value="{{travelDate}}" start="{{minDate}}" bindchange="onDateChange">
+          <view class="glass-input picker-input">
+            <text class="picker-icon">📅</text>
+            <text wx:if="{{travelDate}}">{{travelDate}}</text>
+            <text wx:else class="placeholder">选择出发日期</text>
+          </view>
+        </picker>
+      </view>
+
+      <!-- 天气预报 -->
+      <view class="weather-card glass-card" wx:if="{{weatherInfo && weatherInfo.realtime}}">
+        <view class="weather-main">
+          <text class="weather-temp">{{weatherInfo.realtime.temperature}}°C</text>
+          <text class="weather-desc">{{weatherInfo.realtime.weather}}</text>
+        </view>
+        <view class="weather-advice" wx:if="{{weatherInfo.advice}}">
+          👕 {{weatherInfo.advice}}
+        </view>
+      </view>
+
+      <!-- 旅行天数 -->
+      <view class="form-item">
+        <view class="form-label">旅行天数 <text class="required">*</text></view>
+        <view class="days-selector">
+          <view 
+            wx:for="{{[1,2,3,4,5,6,7]}}" 
+            wx:key="*this"
+            class="day-item glass-tag {{days === item ? 'active' : ''}}"
+            bindtap="selectDays"
+            data-days="{{item}}"
+          >
+            {{item}}天
+          </view>
+        </view>
+      </view>
+
+      <!-- 预算 -->
+      <view class="form-item">
+        <view class="form-label">预算（元） <text class="required">*</text></view>
+        <input 
+          class="glass-input" 
+          type="number" 
+          placeholder="例如：2000" 
+          placeholder-class="input-placeholder"
+          value="{{budget}}"
+          bindinput="onBudgetInput"
+        />
+      </view>
+
+      <!-- 旅行偏好 -->
+      <view class="form-item">
+        <view class="form-label">旅行偏好 <text class="required">*</text></view>
+        <view class="preferences">
+          <view 
+            wx:for="{{preferences}}" 
+            wx:key="name"
+            class="pref-tag glass-tag {{item.selected ? 'active' : ''}}"
+            bindtap="togglePreference"
+            data-index="{{index}}"
+          >
+            {{item.name}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 其他要求 -->
+      <view class="form-item">
+        <view class="form-label">其他要求（可选）</view>
+        <textarea 
+          class="glass-input form-textarea" 
+          placeholder="例如：我想去西湖看日落..."
+          placeholder-class="input-placeholder"
+          value="{{requirements}}"
+          bindinput="onRequirementsInput"
+        />
+      </view>
+
+      <!-- 隐私设置 -->
+      <view class="form-item">
+        <view class="form-label">隐私设置</view>
+        <view class="privacy-options">
+          <view 
+            class="privacy-option {{!isPublic ? 'active' : ''}}" 
+            bindtap="togglePublic"
+            data-public="{{false}}"
+          >
+            <view class="privacy-icon">🔒</view>
+            <view class="privacy-info">
+              <view class="privacy-title">私密</view>
+              <view class="privacy-desc">仅自己可见</view>
+            </view>
+            <view class="privacy-check" wx:if="{{!isPublic}}">✓</view>
+          </view>
+          <view 
+            class="privacy-option {{isPublic ? 'active' : ''}}" 
+            bindtap="togglePublic"
+            data-public="{{true}}"
+          >
+            <view class="privacy-icon">🌍</view>
+            <view class="privacy-info">
+              <view class="privacy-title">公开</view>
+              <view class="privacy-desc">所有人可见，可被社区推荐</view>
+            </view>
+            <view class="privacy-check" wx:if="{{isPublic}}">✓</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 生成按钮 -->
+      <button 
+        class="glass-btn-primary generate-btn {{loading ? 'loading' : ''}}" 
+        bindtap="generatePlan"
+        disabled="{{loading}}"
+      >
+        <view class="btn-content">
+          <text wx:if="{{loading}}" class="loading-icon">⏳</text>
+          <text>{{loading ? 'AI生成中...' : '生成行程方案'}}</text>
+        </view>
+      </button>
+    </view>
+  </view>
+</view>

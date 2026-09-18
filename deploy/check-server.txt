@@ -1,0 +1,18 @@
+AI旅行规划助手 - 服务器检查命令
+==========================================
+
+# 1. SSH登录服务器
+ssh root@wanghaiyan.cn
+
+# 2. 检查.env配置
+cat /opt/travel-planner/server/.env
+
+# 3. 检查PM2服务状态
+pm2 status
+
+# 4. 查看后端日志
+pm2 logs travel-server --lines 50
+
+# 5. 如果服务没启动，手动启动
+cd /opt/travel-planner/server
+pm2 start src/index.js --name travel-server

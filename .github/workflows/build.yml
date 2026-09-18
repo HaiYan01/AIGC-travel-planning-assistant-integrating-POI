@@ -1,0 +1,187 @@
+# AI旅行规划助手 - 多平台自动打包
+# 推送到GitHub后自动构建所有平台的安装包
+
+name: Build All Platforms
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pywebview pyinstaller
+      
+      - name: Build
+        run: |
+          cd desktop-linux
+          pyinstaller --name "AI旅行规划助手-linux-x64" --windowed --onedir \
+            --add-data "logo.png:." \
+            --hidden-import webview \
+            --hidden-import webview.platforms.gtk \
+            --noconfirm \
+            main.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64
+          path: desktop-pyqt/dist/AI旅行规划助手-linux-x64/
+
+  build-linux-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pywebview pyinstaller
+      
+      - name: Build
+        run: |
+          cd desktop-linux
+          pyinstaller --name "AI旅行规划助手-linux-arm64" --windowed --onedir \
+            --add-data "logo.png:." \
+            --hidden-import webview \
+            --hidden-import webview.platforms.gtk \
+            --noconfirm \
+            main.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64
+          path: desktop-pyqt/dist/AI旅行规划助手-linux-arm64/
+
+  build-mac-x64:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pywebview pyinstaller Pillow
+      
+      - name: Build
+        run: |
+          cd desktop-mac
+          pyinstaller --name "AI旅行规划助手-mac-x64" --windowed --onedir \
+            --icon logo.icns \
+            --add-data "logo.icns:." \
+            --hidden-import webview \
+            --hidden-import webview.platforms.cocoa \
+            --noconfirm \
+            main_mac_fix.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-x64
+          path: desktop-pyqt/dist/AI旅行规划助手-mac-x64/
+
+  build-mac-arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pywebview pyinstaller Pillow
+      
+      - name: Build
+        run: |
+          cd desktop-mac
+          pyinstaller --name "AI旅行规划助手-mac-arm64" --windowed --onedir \
+            --icon logo.icns \
+            --add-data "logo.icns:." \
+            --hidden-import webview \
+            --hidden-import webview.platforms.cocoa \
+            --noconfirm \
+            main_mac_fix.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-arm64
+          path: desktop-pyqt/dist/AI旅行规划助手-mac-arm64/
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install PyQt6 PyQt6-WebEngine PyInstaller Pillow
+      
+      - name: Build
+        run: |
+          cd desktop-windows
+          pyinstaller --name "AI旅行规划助手-windows" --windowed --onedir `
+            --icon logo.png `
+            --add-data "logo.png;." `
+            --hidden-import PyQt6 `
+            --hidden-import PyQt6.sip `
+            --hidden-import PyQt6.QtWebEngineWidgets `
+            --hidden-import PyQt6.QtWebEngineCore `
+            --noconfirm `
+            main_webview.py
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: desktop-pyqt/dist/AI旅行规划助手-windows/
+
+  release:
+    needs: [build-linux-x64, build-linux-arm64, build-mac-x64, build-mac-arm64, build-windows]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+      
+      - name: Create archives
+        run: |
+          cd linux-x64 && tar -czf ../AI旅行规划助手-linux-x64.tar.gz . && cd ..
+          cd linux-arm64 && tar -czf ../AI旅行规划助手-linux-arm64.tar.gz . && cd ..
+          cd mac-x64 && tar -czf ../AI旅行规划助手-mac-x64.tar.gz . && cd ..
+          cd mac-arm64 && tar -czf ../AI旅行规划助手-mac-arm64.tar.gz . && cd ..
+          cd windows && zip -r ../AI旅行规划助手-windows.zip . && cd ..
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            AI旅行规划助手-linux-x64.tar.gz
+            AI旅行规划助手-linux-arm64.tar.gz
+            AI旅行规划助手-mac-x64.tar.gz
+            AI旅行规划助手-mac-arm64.tar.gz
+            AI旅行规划助手-windows.zip

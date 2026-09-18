@@ -1,0 +1,93 @@
+<!--pages/index/index.wxml-->
+<view class="page-wrapper">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+  
+  <view class="container">
+    <!-- Hero区域 -->
+    <view class="hero">
+      <view class="hero-icon">
+        <text class="icon-compass">🧭</text>
+      </view>
+      <view class="hero-title">AI旅行规划助手</view>
+      <view class="hero-desc">让AI为你规划完美旅程</view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-actions">
+      <view class="action-card glass-card" bindtap="goToGenerate">
+        <view class="action-icon">✨</view>
+        <view class="action-title">生成行程</view>
+        <view class="action-desc">AI智能规划</view>
+      </view>
+      <view class="action-card glass-card" bindtap="goToCommunity">
+        <view class="action-icon">👥</view>
+        <view class="action-title">攻略社区</view>
+        <view class="action-desc">发现精彩</view>
+      </view>
+    </view>
+
+    <!-- 工具入口 -->
+    <view class="tools-section glass-card">
+      <view class="tool-item" bindtap="goToWeather">
+        <view class="tool-icon">🌤️</view>
+        <view class="tool-name">天气查询</view>
+      </view>
+      <view class="tool-item" bindtap="goToExchange">
+        <view class="tool-icon">💱</view>
+        <view class="tool-name">汇率转换</view>
+      </view>
+      <view class="tool-item" bindtap="goToChat">
+        <view class="tool-icon">🤖</view>
+        <view class="tool-name">AI助手</view>
+      </view>
+      <view class="tool-item" bindtap="goToMy">
+        <view class="tool-icon">👤</view>
+        <view class="tool-name">我的</view>
+      </view>
+    </view>
+
+    <!-- 热门目的地 -->
+    <view class="section glass-card">
+      <view class="section-title">热门目的地</view>
+      <view class="hot-cities">
+        <view 
+          class="city-tag glass-tag" 
+          wx:for="{{hotCities}}" 
+          wx:key="*this"
+          bindtap="selectCity"
+          data-city="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 功能特色 -->
+    <view class="section glass-card">
+      <view class="section-title">核心功能</view>
+      <view class="features">
+        <view class="feature-row">
+          <view class="feature-item">
+            <view class="feature-icon">🤖</view>
+            <view class="feature-name">AI智能生成</view>
+          </view>
+          <view class="feature-item">
+            <view class="feature-icon">🗺️</view>
+            <view class="feature-name">地图可视化</view>
+          </view>
+        </view>
+        <view class="feature-row">
+          <view class="feature-item">
+            <view class="feature-icon">👥</view>
+            <view class="feature-name">攻略社区</view>
+          </view>
+          <view class="feature-item">
+            <view class="feature-icon">💬</view>
+            <view class="feature-name">智能客服</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,82 @@
+<!--pages/exchange/exchange.wxml-->
+<view class="page-wrapper">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+  
+  <view class="container">
+    <view class="glass-card">
+      <view class="card-title">
+        <text class="title-icon">💱</text>
+        <text>汇率转换</text>
+      </view>
+      <view class="card-desc">实时汇率查询与货币转换</view>
+
+      <!-- 金额输入 -->
+      <view class="form-item">
+        <view class="form-label">金额</view>
+        <input 
+          class="glass-input amount-input" 
+          type="digit" 
+          placeholder="请输入金额" 
+          placeholder-class="input-placeholder"
+          value="{{amount}}"
+          bindinput="onAmountInput"
+        />
+      </view>
+
+      <!-- 货币选择 -->
+      <view class="currency-selector">
+        <view class="currency-item">
+          <view class="form-label">从</view>
+          <picker mode="selector" range="{{currencies}}" range-key="name" value="{{fromIndex}}" bindchange="onFromChange">
+            <view class="currency-picker glass-card">
+              <text class="currency-code">{{fromCurrency}}</text>
+              <text class="currency-name">{{currencies[fromIndex].name}}</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="swap-btn" bindtap="swapCurrencies">
+          <text class="swap-icon">⇄</text>
+        </view>
+
+        <view class="currency-item">
+          <view class="form-label">到</view>
+          <picker mode="selector" range="{{currencies}}" range-key="name" value="{{toIndex}}" bindchange="onToChange">
+            <view class="currency-picker glass-card">
+              <text class="currency-code">{{toCurrency}}</text>
+              <text class="currency-name">{{currencies[toIndex].name}}</text>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 转换结果 -->
+      <view class="result-card" wx:if="{{result}}">
+        <view class="result-amount">
+          <text class="result-value">{{result.converted}}</text>
+          <text class="result-currency">{{toCurrency}}</text>
+        </view>
+        <view class="result-rate">汇率: {{result.rate ? result.rate.toFixed(6) : '-'}}</view>
+        <view class="copy-btn" bindtap="copyResult">复制结果</view>
+      </view>
+
+      <!-- 加载状态 -->
+      <view class="loading" wx:if="{{loading}}">计算中...</view>
+    </view>
+
+      <!-- 常用汇率 -->
+      <view class="glass-card" wx:if="{{rates}}">
+        <view class="card-title">
+          <text class="title-icon">📊</text>
+          <text>常用汇率 (基于CNY)</text>
+        </view>
+        <view class="rates-grid">
+          <view class="rate-item" wx:for="{{currencies}}" wx:key="code" wx:if="{{item.code !== 'CNY'}}">
+            <view class="rate-currency">{{item.code}}</view>
+            <view class="rate-value">{{rates.rates && rates.rates[item.code] ? rates.rates[item.code].rate.toFixed(4) : '-'}}</view>
+          </view>
+        </view>
+      </view>
+  </view>
+</view>

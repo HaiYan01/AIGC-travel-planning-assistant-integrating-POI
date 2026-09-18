@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique @db.VarChar(50)
+  email         String    @unique @db.VarChar(100)
+  password      String    @db.VarChar(255)
+  avatar        String?   @db.VarChar(500)
+  nickname      String?   @db.VarChar(50)
+  bio           String?   @db.Text
+  role          String    @default("user") @db.VarChar(20)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  travelPlans   TravelPlan[]
+  comments      Comment[]
+  likes         Like[]
+  followers     Follow[]      @relation("FollowingRelation")
+  following     Follow[]      @relation("FollowerRelation")
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+}
+
+model TravelPlan {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  title         String    @db.VarChar(200)
+  destination   String    @db.VarChar(100)
+  days          Int
+  budget        Int
+  travelDate    DateTime? // 出行日期（私密，不公开展示）
+  preferences   Json      // 用户偏好：美食、历史、自然等
+  itinerary     Json      // AI生成的完整行程JSON
+  isPublic      Boolean   @default(false)
+  viewCount     Int       @default(0)
+  copyCount     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id])
+  comments      Comment[]
+  likes         Like[]
+
+  @@index([userId])
+  @@index([destination])
+  @@index([createdAt])
+}
+
+model Attraction {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(200)
+  city          String    @db.VarChar(100)
+  address       String?   @db.VarChar(500)
+  longitude     Decimal   @db.Decimal(10, 7)
+  latitude      Decimal   @db.Decimal(10, 7)
+  category      String    @db.VarChar(50)    // 景点、美食、酒店等
+  description   String?   @db.Text
+  rating        Decimal?  @db.Decimal(2, 1)
+  avgCost       Int?      // 人均消费
+  images        Json?     // 图片数组
+  openTime      String?   @db.VarChar(100)
+  phone         String?   @db.VarChar(50)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([city])
+  @@index([category])
+}
+
+model Comment {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  planId        Int
+  content       String    @db.Text
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [userId], references: [id])
+  plan          TravelPlan @relation(fields: [planId], references: [id])
+
+  @@index([planId])
+}
+
+model Like {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  planId        Int
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [userId], references: [id])
+  plan          TravelPlan @relation(fields: [planId], references: [id])
+
+  @@unique([userId, planId])
+}
+
+model Follow {
+  id            Int       @id @default(autoincrement())
+  followerId    Int       // 关注者
+  followingId   Int       // 被关注者
+  createdAt     DateTime  @default(now())
+
+  follower      User      @relation("FollowerRelation", fields: [followerId], references: [id])
+  following     User      @relation("FollowingRelation", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+model Message {
+  id            Int       @id @default(autoincrement())
+  senderId      Int
+  receiverId    Int
+  content       String    @db.Text
+  isRead        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  sender        User      @relation("SentMessages", fields: [senderId], references: [id])
+  receiver      User      @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt])
+}

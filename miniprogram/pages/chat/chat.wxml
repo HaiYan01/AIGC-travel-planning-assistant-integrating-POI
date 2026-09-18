@@ -1,0 +1,80 @@
+<!--pages/chat/chat.wxml-->
+<image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+<view class="container">
+  <view class="chat-area">
+    <!-- 消息列表 -->
+    <scroll-view 
+      class="message-list" 
+      scroll-y 
+      scroll-top="{{scrollTop}}"
+      scroll-with-animation
+      style="flex: 1; height: 0;"
+    >
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{messages.length === 0}}">
+        <view class="empty-icon">🤖</view>
+        <view class="empty-title">你好！我是AI旅行助手</view>
+        <view class="empty-desc">我可以帮你解答旅行问题、总结行程等</view>
+        
+        <view class="quick-questions">
+          <view class="quick-title">试试这些问题：</view>
+          <view 
+            class="glass-card quick-item" 
+            wx:for="{{['总结一下我的旅行历史', '推荐几个适合我的目的地', '杭州有什么必去的景点', '成都美食推荐']}}" 
+            wx:key="*this"
+            data-question="{{item}}"
+            bindtap="quickQuestion"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 消息列表 -->
+      <view 
+        class="message-item {{item.role}}" 
+        wx:for="{{messages}}" 
+        wx:key="index"
+      >
+        <view class="avatar {{item.role}}">
+          {{item.role === 'user' ? '我' : 'AI'}}
+        </view>
+        <view class="message-content">
+          <view class="glass-card message-text">{{item.content}}</view>
+        </view>
+      </view>
+
+      <!-- 加载中 -->
+      <view class="message-item assistant" wx:if="{{loading}}">
+        <view class="avatar assistant">AI</view>
+        <view class="message-content">
+          <view class="loading-dots">
+            <view class="dot"></view>
+            <view class="dot"></view>
+            <view class="dot"></view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 输入区域 -->
+    <view class="glass-card input-area">
+      <view class="clear-btn" bindtap="clearChat" wx:if="{{messages.length > 0}}">清空</view>
+      <input 
+        class="glass-input input-box" 
+        placeholder="输入你的问题..." 
+        placeholder-class="input-placeholder"
+        value="{{inputText}}"
+        bindinput="onInput"
+        bindconfirm="sendMessage"
+        confirm-type="send"
+      />
+      <view 
+        class="send-btn {{inputText.trim() ? 'active' : ''}}" 
+        bindtap="sendMessage"
+      >
+        发送
+      </view>
+    </view>
+  </view>
+</view>

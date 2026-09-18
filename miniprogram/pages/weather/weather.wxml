@@ -1,0 +1,116 @@
+<!--pages/weather/weather.wxml-->
+<view class="page-wrapper">
+  <!-- 背景图片 -->
+  <image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+  
+  <view class="container">
+    <!-- 搜索框 -->
+    <view class="glass-card search-card">
+      <view class="search-box">
+        <input 
+          class="glass-input search-input" 
+          placeholder="输入城市名查询天气" 
+          placeholder-class="input-placeholder"
+          value="{{city}}"
+          bindinput="onCityInput"
+          bindconfirm="searchWeather"
+        />
+        <view class="glass-btn search-btn" bindtap="searchWeather">查询</view>
+      </view>
+      
+      <!-- 热门城市 -->
+      <view class="hot-cities">
+        <text class="hot-label">热门：</text>
+        <view 
+          class="city-tag glass-tag" 
+          wx:for="{{hotCities}}" 
+          wx:key="*this"
+          bindtap="selectCity"
+          data-city="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading" wx:if="{{loading}}">
+      <view class="loading-icon">🌤️</view>
+      <view class="loading-text">正在获取天气信息...</view>
+    </view>
+
+    <!-- 天气信息 -->
+    <block wx:if="{{weather && !loading}}">
+      <!-- 实时天气 -->
+      <view class="glass-card weather-card">
+        <view class="weather-header">
+          <view class="city-name">{{weather.city}}</view>
+          <view class="update-time">{{weather.realtime.reporttime}}</view>
+        </view>
+        
+        <view class="weather-main">
+          <view class="weather-icon">{{getWeatherIcon(weather.realtime.weather)}}</view>
+          <view class="weather-info">
+            <view class="temperature">{{weather.realtime.temperature}}°C</view>
+            <view class="weather-desc">{{weather.realtime.weather}}</view>
+          </view>
+        </view>
+
+        <view class="weather-details">
+          <view class="detail-item">
+            <view class="detail-icon">💨</view>
+            <view class="detail-label">风向</view>
+            <view class="detail-value">{{weather.realtime.winddirection}}</view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-icon">🌬️</view>
+            <view class="detail-label">风力</view>
+            <view class="detail-value">{{weather.realtime.windpower}}级</view>
+          </view>
+          <view class="detail-item">
+            <view class="detail-icon">💧</view>
+            <view class="detail-label">湿度</view>
+            <view class="detail-value">{{weather.realtime.humidity}}%</view>
+          </view>
+        </view>
+
+        <!-- 穿衣建议 -->
+        <view class="advice-card" wx:if="{{weather.advice}}">
+          <view class="advice-icon">👕</view>
+          <view class="advice-text">{{weather.advice}}</view>
+        </view>
+      </view>
+
+      <!-- 天气预报 -->
+      <view class="glass-card forecast-card" wx:if="{{weather.forecast && weather.forecast.length > 0}}">
+        <view class="card-title">
+          <text class="title-icon">📅</text>
+          <text>未来天气</text>
+        </view>
+        <view class="forecast-list">
+          <view class="forecast-item" wx:for="{{weather.forecast}}" wx:key="date">
+            <view class="forecast-date">{{item.date}}</view>
+            <view class="forecast-icon">{{getWeatherIcon(item.dayweather)}}</view>
+            <view class="forecast-weather">{{item.dayweather}}</view>
+            <view class="forecast-temp">{{item.nighttemp}}°~{{item.daytemp}}°</view>
+            <view class="forecast-wind">{{item.daywind}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{!weather && !loading && searched}}">
+      <view class="empty-icon">🔍</view>
+      <view class="empty-text">未找到该城市的天气信息</view>
+      <view class="empty-desc">请检查城市名是否正确</view>
+    </view>
+
+    <!-- 初始状态 -->
+    <view class="welcome" wx:if="{{!searched && !loading}}">
+      <view class="welcome-icon">🌤️</view>
+      <view class="welcome-title">天气查询</view>
+      <view class="welcome-desc">输入城市名，查看实时天气和预报</view>
+    </view>
+  </view>
+</view>

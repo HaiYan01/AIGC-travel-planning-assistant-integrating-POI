@@ -1,0 +1,256 @@
+<!--pages/plan/plan.wxml-->
+<image class="bg-image" src="/images/bg.jpg" mode="aspectFill"></image>
+<view class="container">
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <!-- 非作者提示 -->
+  <view class="glass-card card" wx:if="{{plan && !isOwner && !loading}}">
+    <view class="privacy-notice">
+      <view class="privacy-icon">🔒</view>
+      <view class="privacy-text">行程详情仅作者可见</view>
+      <view class="privacy-desc">该行程的详细安排仅对作者开放，您只能查看基本信息</view>
+    </view>
+  </view>
+
+  <block wx:if="{{plan && !loading}}">
+    <!-- 行程头部（所有人可见） -->
+    <view class="glass-card card header-card">
+      <view class="plan-title">{{plan.title}}</view>
+      <view class="plan-info">
+        <view class="info-item">
+          <text class="info-icon">📍</text>
+          <text>{{plan.destination}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-icon">📅</text>
+          <text>{{plan.days}}天</text>
+        </view>
+        <view class="info-item">
+          <text class="info-icon">💰</text>
+          <text>¥{{plan.budget}}</text>
+        </view>
+      </view>
+      <view class="plan-prefs" wx:if="{{plan.preferences}}">
+        <view class="glass-tag pref-tag" wx:for="{{plan.preferences}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-bar">
+      <view class="glass-card action-btn" bindtap="handleLike">
+        <text class="action-icon">{{plan.isLiked ? '❤️' : '🤍'}}</text>
+        <text>{{plan.likeCount || 0}}</text>
+      </view>
+      <view class="glass-card action-btn" bindtap="handleCopy">
+        <text class="action-icon">📋</text>
+        <text>复制</text>
+      </view>
+      <view class="glass-card action-btn" bindtap="handleShare">
+        <text class="action-icon">🔗</text>
+        <text>分享</text>
+      </view>
+      <view class="glass-card action-btn" wx:if="{{isOwner}}" bindtap="togglePublic">
+        <text class="action-icon">{{plan.isPublic ? '🌍' : '🔒'}}</text>
+        <text>{{plan.isPublic ? '公开' : '私密'}}</text>
+      </view>
+    </view>
+
+    <!-- 以下内容仅作者可见 -->
+    <block wx:if="{{isOwner}}">
+      <!-- 天气信息 -->
+      <view class="glass-card card weather-card" wx:if="{{weather}}">
+        <view class="weather-header">
+          <text class="weather-title">🌤️ {{plan.destination}}天气</text>
+        </view>
+        <view class="weather-main" wx:if="{{weather.realtime}}">
+          <text class="weather-temp">{{weather.realtime.temperature}}°C</text>
+          <text class="weather-desc">{{weather.realtime.weather}}</text>
+        </view>
+        <view class="weather-advice" wx:if="{{weather.advice}}">
+          👕 {{weather.advice}}
+        </view>
+      </view>
+
+      <!-- 交通查询 -->
+      <view class="glass-card card" wx:if="{{plan.travelDate}}">
+        <view class="card-title">🚄 交通查询</view>
+        <view class="transport-btns">
+          <view class="glass-card transport-btn" bindtap="openTrainSearch">
+            <text class="transport-icon">🚄</text>
+            <text>12306 查火车票</text>
+          </view>
+          <view class="glass-card transport-btn" bindtap="openFlightSearch">
+            <text class="transport-icon">✈️</text>
+            <text>携程 查机票</text>
+          </view>
+        </view>
+        <view class="transport-tip">💡 点击按钮复制链接，在浏览器中打开查询</view>
+      </view>
+
+      <!-- 行程概要 -->
+      <view class="glass-card card" wx:if="{{plan.itinerary && plan.itinerary.summary}}">
+        <view class="card-title">📝 行程概要</view>
+        <view class="summary-text">{{plan.itinerary.summary}}</view>
+      </view>
+
+      <!-- 日期选择 -->
+      <view class="day-selector" wx:if="{{plan.itinerary && plan.itinerary.days}}">
+        <view 
+          wx:for="{{plan.itinerary.days}}" 
+          wx:key="day"
+          class="glass-tag day-tab {{selectedDay === index ? 'active' : ''}}"
+          bindtap="selectDay"
+          data-index="{{index}}"
+        >
+          第{{item.day}}天
+        </view>
+      </view>
+
+      <!-- 当日行程 -->
+      <view class="glass-card card" wx:if="{{plan.itinerary && plan.itinerary.days && plan.itinerary.days[selectedDay]}}">
+        <view class="day-header">
+          <view class="day-theme">{{plan.itinerary.days[selectedDay].theme}}</view>
+          <view class="day-budget" wx:if="{{plan.itinerary.days[selectedDay].dailyBudget}}">预估：¥{{plan.itinerary.days[selectedDay].dailyBudget}}</view>
+        </view>
+
+        <!-- 活动列表 -->
+        <view class="activity-list">
+          <view 
+            class="activity-item" 
+            wx:for="{{plan.itinerary.days[selectedDay].activities}}" 
+            wx:key="index"
+          >
+            <view class="activity-time">{{item.time}}</view>
+            <view class="glass-card activity-content">
+              <view class="activity-header">
+                <view class="glass-tag activity-type {{item.type}}">
+                  {{item.type === 'attraction' ? '景点' : item.type === 'food' ? '美食' : item.type === 'transport' ? '交通' : '住宿'}}
+                </view>
+                <view class="activity-cost" wx:if="{{item.cost}}">¥{{item.cost}}</view>
+              </view>
+              <view class="activity-name">{{item.name}}</view>
+              <view class="activity-desc" wx:if="{{item.description}}">{{item.description}}</view>
+              <view class="activity-address" wx:if="{{item.address}}">📍 {{item.address}}</view>
+              <view class="activity-tips" wx:if="{{item.tips}}">💡 {{item.tips}}</view>
+              
+              <!-- 景点门票 -->
+              <view class="ticket-info" wx:if="{{item.ticketInfo}}">
+                <view class="ticket-header">
+                  <text class="ticket-name">🎫 {{item.ticketInfo.name}}</text>
+                  <text class="glass-tag ticket-level">{{item.ticketInfo.level}}</text>
+                </view>
+                <view class="ticket-details">
+                  <view wx:if="{{item.ticketInfo.address}}">📍 {{item.ticketInfo.address}}</view>
+                  <view wx:if="{{item.ticketInfo.openTime}}">🕐 {{item.ticketInfo.openTime}}</view>
+                  <view wx:if="{{item.ticketInfo.ticketPrice}}">💰 {{item.ticketInfo.ticketPrice}}</view>
+                </view>
+                <view class="ticket-btns">
+                  <view 
+                    class="glass-btn ticket-btn" 
+                    wx:if="{{item.ticketInfo.ticketWebsite}}"
+                    data-url="{{item.ticketInfo.ticketWebsite}}"
+                    bindtap="openTicketBooking"
+                  >预订门票</view>
+                  <view 
+                    class="glass-btn ticket-btn secondary" 
+                    wx:if="{{item.ticketInfo.officialWebsite}}"
+                    data-url="{{item.ticketInfo.officialWebsite}}"
+                    bindtap="openTicketBooking"
+                  >官方网站</view>
+                </view>
+              </view>
+              
+              <!-- 导航按钮 -->
+              <view 
+                class="glass-tag nav-btn" 
+                wx:if="{{item.longitude && item.latitude}}"
+                data-lng="{{item.longitude}}"
+                data-lat="{{item.latitude}}"
+                data-name="{{item.name}}"
+                bindtap="openNavigation"
+              >
+                🧭 导航到此
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 美食推荐 -->
+        <view class="meals" wx:if="{{plan.itinerary.days[selectedDay].meals}}">
+          <view class="meals-title">🍽️ 美食推荐</view>
+          <view class="meal-list">
+            <view class="glass-card meal-item" wx:if="{{plan.itinerary.days[selectedDay].meals.breakfast && plan.itinerary.days[selectedDay].meals.breakfast.name}}">
+              <view class="meal-label">早餐</view>
+              <view class="meal-name">{{plan.itinerary.days[selectedDay].meals.breakfast.name}}</view>
+              <view class="meal-rec" wx:if="{{plan.itinerary.days[selectedDay].meals.breakfast.recommendation}}">{{plan.itinerary.days[selectedDay].meals.breakfast.recommendation}}</view>
+            </view>
+            <view class="glass-card meal-item" wx:if="{{plan.itinerary.days[selectedDay].meals.lunch && plan.itinerary.days[selectedDay].meals.lunch.name}}">
+              <view class="meal-label">午餐</view>
+              <view class="meal-name">{{plan.itinerary.days[selectedDay].meals.lunch.name}}</view>
+              <view class="meal-rec" wx:if="{{plan.itinerary.days[selectedDay].meals.lunch.recommendation}}">{{plan.itinerary.days[selectedDay].meals.lunch.recommendation}}</view>
+            </view>
+            <view class="glass-card meal-item" wx:if="{{plan.itinerary.days[selectedDay].meals.dinner && plan.itinerary.days[selectedDay].meals.dinner.name}}">
+              <view class="meal-label">晚餐</view>
+              <view class="meal-name">{{plan.itinerary.days[selectedDay].meals.dinner.name}}</view>
+              <view class="meal-rec" wx:if="{{plan.itinerary.days[selectedDay].meals.dinner.recommendation}}">{{plan.itinerary.days[selectedDay].meals.dinner.recommendation}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 旅行小贴士 -->
+      <view class="glass-card card" wx:if="{{plan.itinerary && plan.itinerary.tips && plan.itinerary.tips.length > 0}}">
+        <view class="card-title">💡 旅行小贴士</view>
+        <view class="tips-list">
+          <view class="tip-item" wx:for="{{plan.itinerary.tips}}" wx:key="index">
+            • {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 实用信息 -->
+      <view class="glass-card card" wx:if="{{plan.itinerary.weatherAdvice || plan.itinerary.transportAdvice || plan.itinerary.totalBudget}}">
+        <view class="card-title">📋 实用信息</view>
+        <view class="info-list">
+          <view class="info-item" wx:if="{{plan.itinerary.weatherAdvice}}">
+            <text class="info-label">🌤️ 天气穿衣：</text>
+            <text>{{plan.itinerary.weatherAdvice}}</text>
+          </view>
+          <view class="info-item" wx:if="{{plan.itinerary.transportAdvice}}">
+            <text class="info-label">🚗 交通建议：</text>
+            <text>{{plan.itinerary.transportAdvice}}</text>
+          </view>
+          <view class="info-item" wx:if="{{plan.itinerary.totalBudget}}">
+            <text class="info-label">💰 预估总花费：</text>
+            <text>{{plan.itinerary.totalBudget}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 保险建议 -->
+      <view class="glass-card card insurance-card">
+        <view class="card-title">🛡️ 保险建议</view>
+        <view class="insurance-desc">出行前建议购买合适的保险，为旅途增添一份保障</view>
+        <view class="insurance-list">
+          <view class="insurance-item">
+            <view class="insurance-icon">🏥</view>
+            <view class="insurance-name">旅行意外险</view>
+            <view class="insurance-desc">覆盖意外伤害、医疗费用、紧急救援等</view>
+          </view>
+          <view class="insurance-item">
+            <view class="insurance-icon">✈️</view>
+            <view class="insurance-name">航班延误险</view>
+            <view class="insurance-desc">航班延误或取消时可获得赔偿</view>
+          </view>
+          <view class="insurance-item">
+            <view class="insurance-icon">🧳</view>
+            <view class="insurance-name">行李丢失险</view>
+            <view class="insurance-desc">行李延误、丢失或损坏时可获得赔偿</view>
+          </view>
+        </view>
+        <view class="insurance-tip">💡 以上保险信息仅供参考，请根据自身需求选择</view>
+      </view>
+    </block>
+  </block>
+</view>

@@ -1,0 +1,324 @@
+/* pages/my/my.wxss */
+/* 苹果液态玻璃 8%微磨砂风格 */
+
+.container {
+  padding: 30rpx;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  padding: 36rpx;
+  border-radius: 28rpx;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: 
+    0 8rpx 32rpx rgba(0, 0, 0, 0.18),
+    inset 0 0 22rpx rgba(255, 255, 255, 0.4);
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.18) 0%, 
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.12) 100%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  border-radius: 28rpx;
+}
+
+.login-prompt {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.avatar-placeholder {
+  font-size: 72rpx;
+  margin-bottom: 24rpx;
+}
+
+.login-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.login-desc {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  margin-bottom: 32rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.login-btn {
+  display: inline-block;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.user-card {
+  position: relative;
+  padding: 32rpx;
+  border-radius: 28rpx;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: 
+    0 8rpx 32rpx rgba(0, 0, 0, 0.18),
+    inset 0 0 22rpx rgba(255, 255, 255, 0.4);
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.user-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.18) 0%, 
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.12) 100%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  border-radius: 28rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.4);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-right: 24rpx;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.user-detail {
+  flex: 1;
+}
+
+.username {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8rpx;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.email {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 24rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.add-btn {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.plan-item {
+  position: relative;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  border-radius: 20rpx;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: 
+    0 8rpx 32rpx rgba(0, 0, 0, 0.18),
+    inset 0 0 22rpx rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+}
+
+.plan-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.18) 0%, 
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.12) 100%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  border-radius: 20rpx;
+}
+
+.plan-content {
+  flex: 1;
+}
+
+.plan-title {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.plan-info {
+  display: flex;
+  gap: 16rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  margin-bottom: 12rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.plan-stats {
+  display: flex;
+  gap: 24rpx;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.plan-actions {
+  margin-left: 16rpx;
+}
+
+.delete-btn {
+  position: relative;
+  background: rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(239, 68, 68, 0.68);
+  box-shadow: 
+    0 4rpx 16rpx rgba(0, 0, 0, 0.12),
+    inset 0 0 14rpx rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12rpx 24rpx;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  text-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.3);
+}
+
+.empty {
+  text-align: center;
+  padding: 48rpx 0;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  margin-bottom: 24rpx;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.empty-btn {
+  display: inline-block;
+  font-size: 28rpx;
+  padding: 16rpx 32rpx;
+}
+
+.empty-btn::after {
+  border: none;
+}
+
+.logout-card {
+  padding: 0;
+}
+
+.logout-btn {
+  text-align: center;
+  padding: 28rpx;
+  color: white;
+  font-size: 30rpx;
+  font-weight: 700;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}

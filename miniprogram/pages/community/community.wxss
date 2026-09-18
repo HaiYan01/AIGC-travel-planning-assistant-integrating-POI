@@ -1,0 +1,161 @@
+/* pages/community/community.wxss */
+/* 苹果液态玻璃 8%微磨砂风格 */
+
+.container {
+  padding: 20rpx;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  padding: 0 10rpx;
+}
+
+.filter-item {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.plan-card {
+  position: relative;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow: 
+    0 8rpx 32rpx rgba(0, 0, 0, 0.18),
+    inset 0 0 22rpx rgba(255, 255, 255, 0.4);
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.plan-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.18) 0%, 
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.12) 100%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  border-radius: 28rpx;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.4);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 700;
+  margin-right: 16rpx;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.author-name {
+  font-size: 26rpx;
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.plan-date {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.4);
+}
+
+.plan-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16rpx;
+  line-height: 1.4;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.plan-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.tag {
+  position: relative;
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  background: transparent;
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    0 2rpx 8rpx rgba(0, 0, 0, 0.1),
+    inset 0 0 8rpx rgba(255, 255, 255, 0.2);
+  font-size: 22rpx;
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.2);
+}
+
+.plan-stats {
+  display: flex;
+  gap: 32rpx;
+  padding-top: 16rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: white;
+  font-weight: 700;
+  text-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.45);
+}
+
+.stat-icon {
+  font-size: 22rpx;
+}
+
+.empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}

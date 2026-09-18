@@ -1,0 +1,26 @@
+{
+  "name": "travel-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered personalized travel planner",
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:web": "cd web && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "build:web": "cd web && npm run build",
+    "start": "cd server && npm start",
+    "db:push": "cd server && npm run db:push",
+    "db:seed": "cd server && npm run db:seed",
+    "db:generate": "cd server && npm run db:generate",
+    "install:all": "npm install && cd server && npm install && cd ../web && npm install",
+    "desktop:dev": "cd desktop && npm start",
+    "desktop:build:mac": "cd desktop && npm run build:mac",
+    "desktop:build:win": "cd desktop && npm run build:win",
+    "desktop:build:linux": "cd desktop && npm run build:linux",
+    "docker:up": "cd docker && docker-compose up -d",
+    "docker:down": "cd docker && docker-compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

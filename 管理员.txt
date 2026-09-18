@@ -1,0 +1,4 @@
+账号已经创建好了，直接在登录界面输入：
+
+邮箱：admin@travel.com
+密码：API_KEY
